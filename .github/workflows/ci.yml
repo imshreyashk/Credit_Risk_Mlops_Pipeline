@@ -15,8 +15,11 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install .
-          pip install pytest
+          pip install . pytest httpx joblib scikit-learn
+          # CREATE DUMMY ARTIFACTS SO API DOESN'T CRASH
+          mkdir -p models data/processed
+          python -c "import joblib; from sklearn.ensemble import RandomForestClassifier; from sklearn.preprocessing import StandardScaler; joblib.dump(RandomForestClassifier().fit([[0]], [0]), 'models/model.pkl'); joblib.dump(StandardScaler().fit([[0]]), 'data/processed/preprocessor.pkl')"
+
 
       - name: Run Tests
         run: |
