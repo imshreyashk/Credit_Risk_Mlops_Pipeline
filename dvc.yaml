@@ -1,0 +1,51 @@
+stages:
+  ingest:
+    cmd: python src/ingest.py
+    deps:
+      - src/ingest.py
+      - data/raw/credit_risk.csv
+    outs:
+      - data/processed/train.parquet
+      - data/processed/test.parquet
+
+  transform:
+    cmd: python src/transform.py
+    deps:
+      - src/transform.py
+      - data/processed/train.parquet
+    params:
+      - params.yaml:
+          - transform.test_size
+    outs:
+      - data/processed/X_train.npy
+      - data/processed/X_test.npy
+      - data/processed/y_train.npy
+      - data/processed/y_test.npy
+      - data/processed/preprocessor.pkl
+
+  train:
+    cmd: python src/train.py
+    deps:
+      - src/train.py
+      - data/processed/X_train.npy
+      - data/processed/y_train.npy
+    params:
+      - params.yaml:
+          - model.n_estimators
+          - model.max_depth
+          - model.learning_rate
+    outs:
+      - models/model.pkl
+    metrics:
+      - metrics/scores.json:
+          cache: false
+
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+      - src/evaluate.py
+      - models/model.pkl
+      - data/processed/X_test.npy
+      - data/processed/y_test.npy
+    outs:
+      - metrics/evaluation.json

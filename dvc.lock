@@ -1,0 +1,110 @@
+schema: '2.0'
+stages:
+  ingest:
+    cmd: python src/ingest.py
+    deps:
+    - path: data/raw/credit_risk.csv
+      hash: md5
+      md5: 2020fe6aacf2f0e7df762b87a2b1c8cd
+      size: 25027
+    - path: src/ingest.py
+      hash: md5
+      md5: 222a3d08e72a18a0f308ce9b2ad4a1a4
+      size: 1292
+    outs:
+    - path: data/processed/test.parquet
+      hash: md5
+      md5: 62e1b4f9fbc2f82a901c2c635d5c0b7b
+      size: 9432
+    - path: data/processed/train.parquet
+      hash: md5
+      md5: 16fe048b163fb22f4ab8525de143f44a
+      size: 21694
+  transform:
+    cmd: python src/transform.py
+    deps:
+    - path: data/processed/train.parquet
+      hash: md5
+      md5: 16fe048b163fb22f4ab8525de143f44a
+      size: 21694
+    - path: src/transform.py
+      hash: md5
+      md5: 91e9e21532b52b0502cbff96ccecfae7
+      size: 1536
+    params:
+      params.yaml:
+        transform.test_size: 0.2
+    outs:
+    - path: data/processed/X_test.npy
+      hash: md5
+      md5: 79bddc46f5a37ef7533af6381b1ec1a9
+      size: 8128
+    - path: data/processed/X_train.npy
+      hash: md5
+      md5: 40bdad72e4d4c808c340aaec2a2bb9a7
+      size: 32128
+    - path: data/processed/preprocessor.pkl
+      hash: md5
+      md5: 55473c42bffcdba2f7dcc13bf9bb650b
+      size: 991
+    - path: data/processed/y_test.npy
+      hash: md5
+      md5: 3d1755e0c44b1241e1f01a6d9a7ce96f
+      size: 1728
+    - path: data/processed/y_train.npy
+      hash: md5
+      md5: 00384d7a16f44f65e235d1ade23acabe
+      size: 6528
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: data/processed/X_train.npy
+      hash: md5
+      md5: 40bdad72e4d4c808c340aaec2a2bb9a7
+      size: 32128
+    - path: data/processed/y_train.npy
+      hash: md5
+      md5: 00384d7a16f44f65e235d1ade23acabe
+      size: 6528
+    - path: src/train.py
+      hash: md5
+      md5: cf193244352180ffbff783c4c1b6a687
+      size: 1295
+    params:
+      params.yaml:
+        model.learning_rate: 0.01
+        model.max_depth: 10
+        model.n_estimators: 100
+    outs:
+    - path: metrics/scores.json
+      hash: md5
+      md5: 56f5c4b95638012fd5f066a4d3326e8e
+      size: 27
+    - path: models/model.pkl
+      hash: md5
+      md5: 7dcd2224cff95b0f23640cdc82c19c30
+      size: 1267017
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+    - path: data/processed/X_test.npy
+      hash: md5
+      md5: 79bddc46f5a37ef7533af6381b1ec1a9
+      size: 8128
+    - path: data/processed/y_test.npy
+      hash: md5
+      md5: 3d1755e0c44b1241e1f01a6d9a7ce96f
+      size: 1728
+    - path: models/model.pkl
+      hash: md5
+      md5: 7dcd2224cff95b0f23640cdc82c19c30
+      size: 1267017
+    - path: src/evaluate.py
+      hash: md5
+      md5: fdb167d9d66c93c192b0452f500e43c7
+      size: 1044
+    outs:
+    - path: metrics/evaluation.json
+      hash: md5
+      md5: a192310a28bfa1d3145aaa15b4e71a17
+      size: 68

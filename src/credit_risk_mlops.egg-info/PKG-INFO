@@ -1,0 +1,15 @@
+Metadata-Version: 2.4
+Name: credit-risk-mlops
+Version: 0.1.0
+Summary: End-to-end MLOps pipeline for Credit Risk Prediction
+Requires-Dist: dvc>=3.0.0
+Requires-Dist: mlflow>=2.0.0
+Requires-Dist: scikit-learn>=1.2.0
+Requires-Dist: fastapi>=0.95.0
+Requires-Dist: uvicorn>=0.20.0
+Requires-Dist: pydantic>=2.0.0
+Requires-Dist: evidently>=0.4.0
+Requires-Dist: pandas>=2.0.0
+Requires-Dist: pytest>=7.0.0
+Requires-Dist: ruff>=0.1.0
+Requires-Dist: python-multipart

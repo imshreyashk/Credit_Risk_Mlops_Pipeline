@@ -1,0 +1,24 @@
+name: Credit Risk CI/CD
+on: [push]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install .
+          pip install pytest
+
+      - name: Run Tests
+        run: |
+          # This ensures your code doesn't have syntax errors
+          pytest tests/
