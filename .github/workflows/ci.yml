@@ -16,13 +16,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install . pytest httpx joblib scikit-learn
-          mkdir -p models data/processed
-          # Use absolute paths for the dummy generator
-          python -c "import joblib; from sklearn.ensemble import RandomForestClassifier; from sklearn.preprocessing import StandardScaler; joblib.dump(RandomForestClassifier().fit([[0,0,0,0,0]], [0]), 'models/model.pkl'); joblib.dump(StandardScaler().fit([[0,0,0,0,0]]), 'data/processed/preprocessor.pkl')"
-          # DEBUG: List files to verify they exist
-          ls -R
-
-
+          
       - name: Run Tests
         run: |
           # This ensures your code doesn't have syntax errors
