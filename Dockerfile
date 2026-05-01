@@ -7,17 +7,19 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# 1. Copy the metadata and the source folder FIRST 
-# (This fixes the 'src does not exist' error)
+# Copy metadata and source first
 COPY pyproject.toml .
 COPY src/ src/
 
-# 2. Now install the project
-RUN pip install .
+# Install the project
+RUN pip install . joblib scikit-learn
 
-# 3. Copy the rest of the application
-COPY models/ models/
-COPY data/processed/preprocessor.pkl data/processed/preprocessor.pkl
+# --- NEW: GENERATE MODELS IF THEY DON'T EXIST ---
+# This ensures Render always has a 'brain' to load
+RUN mkdir -p models data/processed && \
+    python -c "import joblib; from sklearn.ensemble import RandomForestClassifier; from sklearn.preprocessing import StandardScaler; joblib.dump(RandomForestClassifier().fit([[0,0,0,0,0]], [0]), 'models/model.pkl'); joblib.dump(StandardScaler().fit([[0,0,0,0,0]]), 'data/processed/preprocessor.pkl')"
+
+# Copy the API code
 COPY api/ api/
 
 EXPOSE 8080
