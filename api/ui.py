@@ -32,7 +32,9 @@ if submit:
     }
     
     # Point this to your Render URL!
-    API_URL = "https://onrender.com" 
+    # Change from public URL to internal localhost
+    API_URL = "http://localhost:8080/predict" 
+
     
     with st.spinner("Calculating risk..."):
         try:

@@ -27,4 +27,4 @@ EXPOSE 8501
 
 # --- CHANGE 3: Run both services simultaneously ---
 # We run FastAPI in the background (&) and Streamlit in the foreground
-CMD uvicorn api.app:app --host 0.0.0.0 --port 8080 & streamlit run api/ui.py --server.port 8501 --server.address 0.0.0.0
+CMD ["sh", "-c", "uvicorn api.app:app --host 0.0.0.0 --port 8080 & streamlit run api/ui.py --server.port 8501 --server.address 0.0.0.0"]
