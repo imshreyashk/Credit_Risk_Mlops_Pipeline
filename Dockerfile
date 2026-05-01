@@ -16,7 +16,7 @@ RUN pip install . joblib scikit-learn streamlit requests
 
 # --- GENERATE MODELS (Keep your working logic) ---
 RUN mkdir -p models data/processed && \
-    python -c "import joblib; from sklearn.ensemble import RandomForestClassifier; from sklearn.preprocessing import StandardScaler; joblib.dump(RandomForestClassifier().fit([[0,0,0,0,0]], [0]), 'models/model.pkl'); joblib.dump(StandardScaler().fit([[0,0,0,0,0]]), 'data/processed/preprocessor.pkl')"
+    python -c "import joblib; from sklearn.ensemble import RandomForestClassifier; from sklearn.preprocessing import StandardScaler; joblib.dump(RandomForestClassifier().fit([[20,5,5,5,5],[80,1,1,1,1]], [0,1]), 'models/model.pkl'); joblib.dump(StandardScaler().fit([[20,5,5,5,5],[80,1,1,1,1]]), 'data/processed/preprocessor.pkl')"
 
 # Copy the API and UI code
 COPY api/ api/
